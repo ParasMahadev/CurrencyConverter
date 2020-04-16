@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Ry3-Ic-c00">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <device id="retina6_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15509"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Currency Exchange-->
+        <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="CurrencyConverter" customModuleProvider="target" sceneMemberID="viewController">
@@ -15,6 +15,61 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ebR-jJ-Es4">
+                                <rect key="frame" x="0.0" y="88" width="414" height="808"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dFe-FJ-g5p">
+                                        <rect key="frame" x="0.0" y="548" width="414" height="260"/>
+                                        <subviews>
+                                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FeH-zB-CAk">
+                                                <rect key="frame" x="0.0" y="44" width="414" height="216"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="216" id="Twy-4K-500"/>
+                                                </constraints>
+                                                <connections>
+                                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="uMd-Nw-Fdd"/>
+                                                    <outlet property="delegate" destination="BYZ-38-t0r" id="GwR-UW-zJh"/>
+                                                </connections>
+                                            </pickerView>
+                                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7r7-Nd-3yO">
+                                                <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="44" id="rua-0r-eRL"/>
+                                                </constraints>
+                                                <items>
+                                                    <barButtonItem title="Cancel" id="ERj-mV-NIT">
+                                                        <connections>
+                                                            <action selector="btnCancelPicker:" destination="BYZ-38-t0r" id="sHI-k9-u7P"/>
+                                                        </connections>
+                                                    </barButtonItem>
+                                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="GH7-tu-y3n"/>
+                                                    <barButtonItem title="Done" id="fbe-qz-hFb">
+                                                        <connections>
+                                                            <action selector="btnDonePicker:" destination="BYZ-38-t0r" id="c47-EG-IgN"/>
+                                                        </connections>
+                                                    </barButtonItem>
+                                                </items>
+                                            </toolbar>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                        <constraints>
+                                            <constraint firstItem="FeH-zB-CAk" firstAttribute="leading" secondItem="dFe-FJ-g5p" secondAttribute="leading" id="8Mn-mG-znt"/>
+                                            <constraint firstItem="7r7-Nd-3yO" firstAttribute="leading" secondItem="dFe-FJ-g5p" secondAttribute="leading" symbolic="YES" id="FF0-E7-V1Q"/>
+                                            <constraint firstItem="FeH-zB-CAk" firstAttribute="top" secondItem="7r7-Nd-3yO" secondAttribute="bottom" symbolic="YES" id="Fx3-N7-Ufh"/>
+                                            <constraint firstAttribute="trailing" secondItem="7r7-Nd-3yO" secondAttribute="trailing" symbolic="YES" id="IaK-Lw-FdX"/>
+                                            <constraint firstAttribute="trailing" secondItem="FeH-zB-CAk" secondAttribute="trailing" id="YwB-vM-v6L"/>
+                                            <constraint firstAttribute="height" constant="260" id="deC-uG-cyx"/>
+                                            <constraint firstAttribute="bottom" secondItem="FeH-zB-CAk" secondAttribute="bottom" id="zQn-hX-B8T"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.51078232020000003" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="dFe-FJ-g5p" firstAttribute="leading" secondItem="ebR-jJ-Es4" secondAttribute="leading" id="DI0-aJ-2HV"/>
+                                    <constraint firstAttribute="trailing" secondItem="dFe-FJ-g5p" secondAttribute="trailing" id="Kti-sy-t9B"/>
+                                    <constraint firstAttribute="bottom" secondItem="dFe-FJ-g5p" secondAttribute="bottom" id="jER-Vd-9Jm"/>
+                                </constraints>
+                            </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="grT-X6-Ijm">
                                 <rect key="frame" x="0.0" y="88" width="414" height="808"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -26,16 +81,53 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="ebR-jJ-Es4" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="5J0-Ul-lkL"/>
                             <constraint firstItem="grT-X6-Ijm" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="9Ab-ON-spP"/>
+                            <constraint firstAttribute="bottom" secondItem="ebR-jJ-Es4" secondAttribute="bottom" id="Gbj-8m-41X"/>
+                            <constraint firstItem="ebR-jJ-Es4" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="IxU-Cb-cuO"/>
                             <constraint firstItem="grT-X6-Ijm" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="SNy-bE-PyB"/>
                             <constraint firstItem="grT-X6-Ijm" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="aKG-gh-LPI"/>
                             <constraint firstAttribute="bottom" secondItem="grT-X6-Ijm" secondAttribute="bottom" id="gLJ-gi-MCH"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="ebR-jJ-Es4" secondAttribute="trailing" id="sLL-2y-dCE"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Currency Exchange" id="EH9-84-zCF"/>
+                    <navigationItem key="navigationItem" id="EH9-84-zCF">
+                        <nil key="title"/>
+                        <view key="titleView" contentMode="scaleToFill" id="EGY-az-DFm">
+                            <rect key="frame" x="82" y="2" width="250" height="40"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B0w-pP-tuH">
+                                    <rect key="frame" x="0.0" y="0.0" width="250" height="40"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <inset key="titleEdgeInsets" minX="-6" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                    <inset key="imageEdgeInsets" minX="220" minY="1" maxX="0.0" maxY="0.0"/>
+                                    <state key="normal" title="CurrencyExchange(MYR)" image="arrowtriangle.down.fill" catalog="system">
+                                        <color key="titleColor" systemColor="linkColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </state>
+                                    <state key="highlighted">
+                                        <color key="titleColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="btnChangeCountry:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6Gz-4H-dnf"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </view>
+                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="SG7-kv-KvS">
+                            <connections>
+                                <action selector="btnRefresh:" destination="BYZ-38-t0r" id="6Ve-Px-vUH"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
+                        <outlet property="btnTitle" destination="B0w-pP-tuH" id="Dbz-Up-RWm"/>
+                        <outlet property="pickerVw" destination="FeH-zB-CAk" id="IKz-TQ-SkR"/>
                         <outlet property="tableview" destination="grT-X6-Ijm" id="J9f-rj-bXX"/>
+                        <outlet property="viewPicker" destination="ebR-jJ-Es4" id="nOw-kk-HX9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -45,6 +137,7 @@
         <!--Navigation Controller-->
         <scene sceneID="1bQ-Nn-lAj">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ujl-yg-7tD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Ry3-Ic-c00" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="VVm-SC-OMZ">
@@ -56,9 +149,11 @@
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="XD5-tq-GzH"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ujl-yg-7tD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="137.68115942028987" y="113.83928571428571"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="arrowtriangle.down.fill" catalog="system" width="64" height="62"/>
+    </resources>
 </document>

@@ -8,77 +8,135 @@
 
 import UIKit
 import Moya
+import RealmSwift
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-   
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
+    
     let provider = MoyaProvider<WebService>()
-
     var rate = [CurrencyRate](){
-         didSet{
-           tableview.reloadData()
+        didSet{
+            tableview.reloadData()
+            pickerVw.reloadAllComponents()
         }
     }
-    
+    @IBOutlet var btnTitle: UIButton!
     @IBOutlet var tableview: UITableView!{
-         didSet{
+        didSet{
             tableview.register(UINib(nibName:"CurrencyCell", bundle: nil), forCellReuseIdentifier: "CurrencyCell")
         }
     }
-        
+    
+    @IBOutlet var viewPicker: UIView!
+    @IBOutlet var pickerVw: UIPickerView!
+    
+    var selectedCountry = "MYR"{
+        didSet
+        {
+            btnTitle.setTitle("CurrencyExchange(\(selectedCountry))", for: .normal)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-//        provider.request(.getExchangeRates) { Result in
-//            
-//            switch Result{
-//            case.success(let response):
-//                do {
-//                    let json = try JSONDecoder().decode(Currency.self, from: response.data)
-//                    self.rate = (json.rates?.compactMap({ (key,val)  in
-//                        return CurrencyRate(countryName: key, countryCurrency: val)
-//                    }))!
-//                        
-//                } catch  {
-//                    print(error)
-//                }
-//            case .failure(let error):
-//                print(error)
-//            }
-//        }
-        
-        provider.request(.getExchangeRatesByBaseCountry(baseCountry: "MYR")) { Result in
-            
-            print(Result)
-            switch Result{
-                
-            case.success(let response):
-                do {
-                    let json = try JSONDecoder().decode(Currency.self, from: response.data)
-                    self.rate = (json.rates?.compactMap({ (key,val)  in
-                        return CurrencyRate(countryName: key, countryCurrency: val)
-                    }))!
+        refreshData()
+    }
+   
+    func refreshData()
+    {
+        if Connectivity.sharedInstance.isReachable
+        {
+            provider.request(.getExchangeRatesByBaseCountry(baseCountry: selectedCountry)) { Result in
+                switch Result{
+                case.success(let response):
+                    do {
+                        let json = try JSONDecoder().decode(Currency.self, from: response.data)
+                        let currencyArray = (json.rates?.compactMap({ (key,val)  in
+                            return CurrencyRate(countryName: key, countryCurrency: val)
+                        }))!
                         
-                } catch  {
+                        DatabseMethods.shared.saveCurrencyDataArray(arrData: currencyArray)
+                        self.rate = DatabseMethods.shared.getData()
+                        
+                    } catch  {
+                        print(error)
+                    }
+                case .failure(let error):
                     print(error)
                 }
-            case .failure(let error):
-                print(error)
+            }
+        }
+        else
+        {
+            self.rate = DatabseMethods.shared.getData()
+            if self.rate.count == 0
+            {
+                showAlert(message: "No Internet connectivity", viewController: self)
             }
         }
     }
-   
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         return rate.count
     }
-       
-       func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
+    {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CurrencyCell", for: indexPath) as! CurrencyCell
         cell.lblCountry.text = rate[indexPath.row].countryName
         cell.lblRate.text = "\(rate[indexPath.row].countryCurrency ?? 0)"
+        
+        if  rate[indexPath.row].countryName == selectedCountry
+        {
+            cell.backgroundColor = .lightGray
+        }
+        else
+        {
+            cell.backgroundColor = .white
+        }
+        
         return cell
-       }
-
+    }
+    @IBAction func btnChangeCountry(_ sender: Any)
+    {
+        viewPicker.isHidden = false
+        self.view.bringSubviewToFront(viewPicker)
+    }
+    @IBAction func btnCancelPicker(_ sender: Any)
+    {
+        viewPicker.isHidden = true
+        self.view.sendSubviewToBack(viewPicker)
+    }
+    
+    @IBAction func btnRefresh(_ sender: Any)
+    {
+       refreshData()
+    }
+    
+    @IBAction func btnDonePicker(_ sender: Any)
+    {
+        viewPicker.isHidden = true
+        self.view.sendSubviewToBack(viewPicker)
+        refreshData()
+    }
+    
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int
+    {
+        return self.rate.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int)
+    {
+        selectedCountry = self.rate[row].countryName ?? ""
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String?
+    {
+        return self.rate[row].countryName
+    }
 }
 

@@ -14,10 +14,13 @@ struct Currency: Codable {
     let base, date: String?
 }
 
-
 // MARK: - Currency
 struct CurrencyRate
 {
     var countryName : String?
     var countryCurrency : Double?
 }
+
+
+
+

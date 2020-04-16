@@ -12,10 +12,10 @@ class CurrencyCell: UITableViewCell {
    
     @IBOutlet weak var lblCountry: UILabel!
     @IBOutlet weak var lblRate: UILabel!
-    
+        
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
