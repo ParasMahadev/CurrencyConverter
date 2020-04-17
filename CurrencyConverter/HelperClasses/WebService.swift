@@ -12,7 +12,7 @@ import Alamofire
 enum WebService{
     case getExchangeRates
     case getExchangeRatesByBaseCountry(baseCountry : String)
-    case getExchangeRatesBWCountry(country1 : String, country2: String)
+    case getExchangeRatesBWCountry(baseCountry : String, otherCountry: String)
     
     //https://api.exchangeratesapi.io/latest?base=USD&symbols=USD,GBP
     
@@ -52,8 +52,8 @@ extension WebService : TargetType{
             let authParams = ["base":"\(baseCountry)"]
             return .requestParameters(parameters: authParams, encoding: URLEncoding.default)
 
-        case .getExchangeRatesBWCountry(let country1,let country2):
-            let authParams = ["base":"\(country1)","symbols":"\(country1),\(country2)"]
+        case .getExchangeRatesBWCountry(let base_country,let other_country):
+            let authParams = ["base":"\(base_country)","symbols":"\(base_country),\(other_country)"]
             return .requestParameters(parameters: authParams, encoding: URLEncoding.default)
         }
     }

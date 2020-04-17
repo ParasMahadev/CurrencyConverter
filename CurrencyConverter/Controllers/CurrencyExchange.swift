@@ -10,29 +10,30 @@ import UIKit
 import Moya
 import RealmSwift
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
+class CurrencyExchange: UIViewController, UITableViewDataSource, UITableViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
     
     let provider = MoyaProvider<WebService>()
+    @IBOutlet var viewPicker: UIView!
+    @IBOutlet var pickerVw: UIPickerView!
+    @IBOutlet var btnTitle: UIButton!
+    
     var rate = [CurrencyRate](){
         didSet{
             tableview.reloadData()
             pickerVw.reloadAllComponents()
         }
     }
-    @IBOutlet var btnTitle: UIButton!
+    
     @IBOutlet var tableview: UITableView!{
         didSet{
             tableview.register(UINib(nibName:"CurrencyCell", bundle: nil), forCellReuseIdentifier: "CurrencyCell")
         }
     }
     
-    @IBOutlet var viewPicker: UIView!
-    @IBOutlet var pickerVw: UIPickerView!
-    
     var selectedCountry = "MYR"{
         didSet
         {
-            btnTitle.setTitle("CurrencyExchange(\(selectedCountry))", for: .normal)
+            btnTitle.setTitle("Currency Exchange(\(selectedCountry))", for: .normal)
         }
     }
     
@@ -40,7 +41,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         super.viewDidLoad()
         refreshData()
     }
-   
+    
+    // MARK: - Refresh Data API call
+    /*
+    @Developer     - Paras Navadiya
+    @Description   - This method will used to refresh data or get latetst data of currency.
+    @Parameter     - No Parameters
+    @Return        - Void
+    */
     func refreshData()
     {
         if Connectivity.sharedInstance.isReachable
@@ -74,6 +82,31 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             }
         }
     }
+    
+    // MARK: - Button Action Methods
+    @IBAction func btnChangeCountry(_ sender: Any)
+    {
+        viewPicker.isHidden = false
+        self.view.bringSubviewToFront(viewPicker)
+    }
+    @IBAction func btnCancelPicker(_ sender: Any)
+    {
+        viewPicker.isHidden = true
+        self.view.sendSubviewToBack(viewPicker)
+    }
+        
+    @IBAction func btnDonePicker(_ sender: Any)
+    {
+        viewPicker.isHidden = true
+        self.view.sendSubviewToBack(viewPicker)
+        refreshData()
+    }
+    @IBAction func btnRefresh(_ sender: Any)
+    {
+        refreshData()
+    }
+    
+    // MARK: - UITableView Delegate and DataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         return rate.count
@@ -96,30 +129,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         return cell
     }
-    @IBAction func btnChangeCountry(_ sender: Any)
-    {
-        viewPicker.isHidden = false
-        self.view.bringSubviewToFront(viewPicker)
-    }
-    @IBAction func btnCancelPicker(_ sender: Any)
-    {
-        viewPicker.isHidden = true
-        self.view.sendSubviewToBack(viewPicker)
-    }
     
-    @IBAction func btnRefresh(_ sender: Any)
-    {
-       refreshData()
-    }
-    
-    @IBAction func btnDonePicker(_ sender: Any)
-    {
-        viewPicker.isHidden = true
-        self.view.sendSubviewToBack(viewPicker)
-        refreshData()
-    }
-    
-    
+    // MARK: - UIPickerView Delegate and DataSource
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }

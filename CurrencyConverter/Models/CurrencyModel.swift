@@ -14,7 +14,7 @@ struct Currency: Codable {
     let base, date: String?
 }
 
-// MARK: - Currency
+// MARK: - Rate
 struct CurrencyRate
 {
     var countryName : String?
