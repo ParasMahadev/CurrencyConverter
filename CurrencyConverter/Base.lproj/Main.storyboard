@@ -296,6 +296,13 @@
                                 <color key="textColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GyL-Qi-Ppg" customClass="BarChartView" customModule="Charts">
+                                <rect key="frame" x="0.0" y="233" width="414" height="312"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="312" id="GZw-q8-WRk"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
@@ -304,6 +311,8 @@
                             <constraint firstItem="YhV-Ne-tSd" firstAttribute="trailing" secondItem="GRI-B8-0yd" secondAttribute="trailing" id="IZd-u7-jmv"/>
                             <constraint firstItem="sqR-xk-n70" firstAttribute="leading" secondItem="Kgk-zP-D7b" secondAttribute="trailing" constant="10" id="Js9-NR-dR6"/>
                             <constraint firstItem="UaW-SM-tA1" firstAttribute="leading" secondItem="GRI-B8-0yd" secondAttribute="leading" constant="20" id="QhE-ux-9CH"/>
+                            <constraint firstItem="GyL-Qi-Ppg" firstAttribute="top" secondItem="kAN-Gp-MW7" secondAttribute="bottom" constant="8" id="RdV-iv-RbY"/>
+                            <constraint firstItem="GyL-Qi-Ppg" firstAttribute="trailing" secondItem="GRI-B8-0yd" secondAttribute="trailing" id="RkE-FT-P2T"/>
                             <constraint firstItem="GRI-B8-0yd" firstAttribute="trailing" secondItem="5hS-YF-VSx" secondAttribute="trailing" constant="20" id="Uag-jR-IqG"/>
                             <constraint firstItem="YhV-Ne-tSd" firstAttribute="leading" secondItem="GRI-B8-0yd" secondAttribute="leading" id="cLE-LS-621"/>
                             <constraint firstItem="sqR-xk-n70" firstAttribute="top" secondItem="5hS-YF-VSx" secondAttribute="bottom" constant="20" id="dbi-O4-FLi"/>
@@ -312,6 +321,7 @@
                             <constraint firstItem="UaW-SM-tA1" firstAttribute="top" secondItem="GRI-B8-0yd" secondAttribute="top" constant="20" id="o7B-RS-3nR"/>
                             <constraint firstItem="Kgk-zP-D7b" firstAttribute="top" secondItem="UaW-SM-tA1" secondAttribute="bottom" constant="20" id="olc-wD-kOK"/>
                             <constraint firstItem="kAN-Gp-MW7" firstAttribute="top" secondItem="sqR-xk-n70" secondAttribute="bottom" constant="8" id="uJ1-3B-t9C"/>
+                            <constraint firstItem="GyL-Qi-Ppg" firstAttribute="leading" secondItem="GRI-B8-0yd" secondAttribute="leading" id="w2R-rN-waF"/>
                             <constraint firstItem="5hS-YF-VSx" firstAttribute="leading" secondItem="UaW-SM-tA1" secondAttribute="trailing" constant="10" id="wpK-tZ-j1e"/>
                             <constraint firstItem="Kgk-zP-D7b" firstAttribute="leading" secondItem="GRI-B8-0yd" secondAttribute="leading" constant="20" id="x1B-27-Uyc"/>
                         </constraints>
@@ -321,6 +331,7 @@
                     <connections>
                         <outlet property="btnBaseCountry" destination="UaW-SM-tA1" id="kg1-gr-j71"/>
                         <outlet property="btnOtherCountry" destination="Kgk-zP-D7b" id="tRf-TF-KEJ"/>
+                        <outlet property="chartView" destination="GyL-Qi-Ppg" id="noH-vU-1wx"/>
                         <outlet property="lblLastUpdate" destination="kAN-Gp-MW7" id="6gl-oS-gee"/>
                         <outlet property="pickerVw" destination="ZaM-nH-i43" id="MUZ-fm-mc1"/>
                         <outlet property="txtBaseCountry" destination="5hS-YF-VSx" id="dyc-Ea-XkQ"/>

@@ -17,20 +17,23 @@ class CurrencyExchange: UIViewController, UITableViewDataSource, UITableViewDele
     @IBOutlet var pickerVw: UIPickerView!
     @IBOutlet var btnTitle: UIButton!
     
-    var rate = [CurrencyRate](){
+    var rate = [CurrencyRate]() // Rate Array to display country in picker view
+        {
         didSet{
             tableview.reloadData()
             pickerVw.reloadAllComponents()
         }
     }
     
-    @IBOutlet var tableview: UITableView!{
+    @IBOutlet var tableview: UITableView! // UITableview to display list of the currency.
+        {
         didSet{
             tableview.register(UINib(nibName:"CurrencyCell", bundle: nil), forCellReuseIdentifier: "CurrencyCell")
         }
     }
     
-    var selectedCountry = "MYR"{
+    var selectedCountry = "MYR" // Default selected currency to display in title.
+    {
         didSet
         {
             btnTitle.setTitle("Exchange (\(selectedCountry))", for: .normal)
@@ -44,11 +47,11 @@ class CurrencyExchange: UIViewController, UITableViewDataSource, UITableViewDele
     
     // MARK: - Refresh Data API call
     /*
-    @Developer     - Paras Navadiya
-    @Description   - This method will used to refresh data or get latetst data of currency.
-    @Parameter     - No Parameters
-    @Return        - Void
-    */
+     @Developer     - Paras Navadiya
+     @Description   - This method will used to refresh data or get latetst data of currency.
+     @Parameter     - No Parameters
+     @Return        - Void
+     */
     func refreshData()
     {
         if Connectivity.sharedInstance.isReachable
@@ -94,7 +97,7 @@ class CurrencyExchange: UIViewController, UITableViewDataSource, UITableViewDele
         viewPicker.isHidden = true
         self.view.sendSubviewToBack(viewPicker)
     }
-        
+    
     @IBAction func btnDonePicker(_ sender: Any)
     {
         viewPicker.isHidden = true

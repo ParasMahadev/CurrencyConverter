@@ -3,7 +3,8 @@
 
 target 'CurrencyConverter' do
   pod 'Moya'
-  pod 'RealmSwift' 
+  pod 'RealmSwift'
+  pod 'Charts'
   # Comment the next line if you don't want to use dynamic frameworks
     use_frameworks!
 

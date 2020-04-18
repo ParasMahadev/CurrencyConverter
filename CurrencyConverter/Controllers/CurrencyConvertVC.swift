@@ -9,28 +9,38 @@
 import UIKit
 import Moya
 import RealmSwift
+import Charts
 
-class CurrencyConvertVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class CurrencyConvertVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, ChartViewDelegate {
     
     @IBOutlet var btnBaseCountry: UIButton!
     @IBOutlet var btnOtherCountry: UIButton!
-    
     @IBOutlet var txtBaseCountry: UITextField!
     @IBOutlet var txtOtherCountry: UITextField!
-    
     @IBOutlet var viewPicker: UIView!
     @IBOutlet var pickerVw: UIPickerView!
     @IBOutlet var lblLastUpdate: UILabel!
+    @IBOutlet var chartView: BarChartView!
     
-    var isBaseCountry = true
+    var isBaseCountry = true // To differentiate picker view
+    let provider = MoyaProvider<WebService>() // Api calling
     
-    let provider = MoyaProvider<WebService>()
-    var rate = [CurrencyRate](){
+    var arrCountryList = [CurrencyRate]() // Rate Array to display country in picker view
+        {
         didSet{
             pickerVw.reloadAllComponents()
         }
     }
     
+    var arrChartData = [ChartData]() // For display data in chart
+        {
+        didSet
+        {
+            setChartData(arrData: arrChartData)
+        }
+    }
+    
+    // Below variable are default variable to use in currency convertion
     var strBaseCountry = "MYR"
     var otherCountry = "INR"
     var baseValue = 0.0
@@ -39,6 +49,11 @@ class CurrencyConvertVC: UIViewController, UIPickerViewDelegate, UIPickerViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.arrCountryList = DatabseMethods.shared.getData()
+        
+        setup(barLineChartView: chartView) // Setup chart view
+        
+        // Border and cornor redius of buttons
         btnBaseCountry.layer.cornerRadius = 5
         btnBaseCountry.layer.borderColor = UIColor.link.cgColor
         btnBaseCountry.layer.borderWidth = 1.0
@@ -50,16 +65,48 @@ class CurrencyConvertVC: UIViewController, UIPickerViewDelegate, UIPickerViewDat
         btnBaseCountry.setTitle("\(strBaseCountry)", for: .normal)
         btnOtherCountry.setTitle("\(otherCountry)", for: .normal)
         
-        txtBaseCountry.text = "1.0"
+        txtBaseCountry.text = "1.0" // Setting default value in base country currency.
         
-        self.rate = DatabseMethods.shared.getData()
-        refreshData(baseCountry: strBaseCountry, otherCountry: otherCountry)
-        
+        // Adding editing event for calculation of currency
         txtBaseCountry.addTarget(self, action: #selector(txtBaseCountryEditing), for: UIControl.Event.editingChanged)
         txtOtherCountry.addTarget(self, action: #selector(txtOtherCountryEditing), for: UIControl.Event.editingChanged)
         
+        // Adding Tap gesture for removing keyboard
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         self.view.addGestureRecognizer(tapGesture)
+        
+        //Making first api call to get data form the default values Here is : MYR and INR
+        convertCurrency(baseCountry: strBaseCountry, otherCountry: otherCountry) {
+            self.getRateBWdates(baseCountry: self.strBaseCountry, otherCountry: self.otherCountry)
+        }
+    }
+    
+    func setup(barLineChartView chartView: BarLineChartViewBase) {
+        
+        chartView.delegate = self
+        chartView.rightAxis.enabled = false
+        let xAxis = chartView.xAxis
+        xAxis.labelPosition = .bottom
+        xAxis.labelFont = .systemFont(ofSize: 10)
+        xAxis.granularity = 1
+        xAxis.valueFormatter = DayAxisValueFormatter(chart: chartView)
+    }
+    
+    func setChartData(arrData: [ChartData])
+    {
+        var entries  = [BarChartDataEntry]()
+        
+        for item in arrData
+        {
+            let entry = BarChartDataEntry(x: Double((item.date?.getDate().interval())!), y: item.currency ?? 0)
+            entries.append(entry)
+        }
+        
+        let dataSet = BarChartDataSet(entries: entries, label: "Last 7 Days Results")
+        let data = BarChartData(dataSets: [dataSet])
+        
+        chartView.data = data
+        chartView.notifyDataSetChanged()
     }
     
     @objc func dismissKeyboard () {
@@ -71,9 +118,8 @@ class CurrencyConvertVC: UIViewController, UIPickerViewDelegate, UIPickerViewDat
     {
         let newBaseValue = Double(txtBaseCountry.text!) ?? 0.0
         txtOtherCountry.text = "\(newBaseValue * otherValue)"
-        
-        
     }
+    
     @objc func txtOtherCountryEditing(textField: UITextField)
     {
         let newOtherValue = Double(txtOtherCountry.text!) ?? 0.0
@@ -81,14 +127,14 @@ class CurrencyConvertVC: UIViewController, UIPickerViewDelegate, UIPickerViewDat
     }
     
     
-    // MARK: - Refresh Data API call
+    // MARK: - Currency Conversation API call
     /*
      @Developer     - Paras Navadiya
      @Description   - This method will used to refresh data or get latetst data of currency.
      @Parameter     - No Parameters
      @Return        - Void
      */
-    func refreshData(baseCountry : String, otherCountry: String)
+    func convertCurrency(baseCountry : String, otherCountry: String, completion:@escaping ()->())
     {
         print(baseCountry, otherCountry)
         if Connectivity.sharedInstance.isReachable
@@ -99,37 +145,41 @@ class CurrencyConvertVC: UIViewController, UIPickerViewDelegate, UIPickerViewDat
                     do {
                         let json = try JSONDecoder().decode(Currency.self, from: response.data)
                         
-                        let currencyArray = (json.rates?.compactMap({ (key,val)  in
-                            return CurrencyRate(countryName: key, countryCurrency: val)
-                        }))!
-                        
-                        if json.base == self.strBaseCountry && json.base == currencyArray[0].countryName ?? ""
+                        if json.rates?.count ?? 0 > 0
                         {
-                            self.baseValue = currencyArray[0].countryCurrency ?? 0.0
-                            self.otherValue = currencyArray[1].countryCurrency ?? 0.0
-                            self.txtBaseCountry.text = "\(currencyArray[0].countryCurrency ?? 0)"
-                            guard let baseVal = Double(self.txtBaseCountry.text!) else {return}
-                            guard let countryCurrency = currencyArray[1].countryCurrency else {return}
+                            let currencyArray = (json.rates?.compactMap({ (key,val)  in
+                                return CurrencyRate(countryName: key, countryCurrency: val)
+                            }))!
                             
-                            self.txtOtherCountry.text = "\(baseVal * countryCurrency)"
-                        }
-                        else
-                        {
-                            self.baseValue = currencyArray[1].countryCurrency ?? 0.0
-                            self.otherValue = currencyArray[0].countryCurrency ?? 0.0
-                            self.txtBaseCountry.text = "\(currencyArray[1].countryCurrency ?? 0)"
-                            guard let baseVal = Double(self.txtBaseCountry.text!) else {return}
-                            guard let countryCurrency = currencyArray[0].countryCurrency else {return}
                             
-                            self.txtOtherCountry.text = "\(baseVal * countryCurrency)"
+                            if json.base == self.strBaseCountry && json.base == currencyArray[0].countryName ?? ""
+                            {
+                                self.baseValue = currencyArray[0].countryCurrency ?? 0.0
+                                self.otherValue = currencyArray[1].countryCurrency ?? 0.0
+                                self.txtBaseCountry.text = "\(currencyArray[0].countryCurrency ?? 0)"
+                                guard let baseVal = Double(self.txtBaseCountry.text!) else {return}
+                                guard let countryCurrency = currencyArray[1].countryCurrency else {return}
+                                
+                                self.txtOtherCountry.text = "\(baseVal * countryCurrency)"
+                            }
+                            else
+                            {
+                                self.baseValue = currencyArray[1].countryCurrency ?? 0.0
+                                self.otherValue = currencyArray[0].countryCurrency ?? 0.0
+                                self.txtBaseCountry.text = "\(currencyArray[1].countryCurrency ?? 0)"
+                                guard let baseVal = Double(self.txtBaseCountry.text!) else {return}
+                                guard let countryCurrency = currencyArray[0].countryCurrency else {return}
+                                
+                                self.txtOtherCountry.text = "\(baseVal * countryCurrency)"
+                            }
+                            self.lblLastUpdate.text = "Last updated: " + (json.date ?? "")
                         }
-                        self.lblLastUpdate.text = "Last updated: " + (json.date ?? "")
-                        
+                        completion()
                     } catch  {
-                        print(error)
+                        showAlert(message: error.localizedDescription, viewController: self)
                     }
                 case .failure(let error):
-                    print(error)
+                    showAlert(message: error.localizedDescription, viewController: self)
                 }
             }
         }
@@ -138,6 +188,62 @@ class CurrencyConvertVC: UIViewController, UIPickerViewDelegate, UIPickerViewDat
             showAlert(message: "The Internet connection appears to be offline", viewController: self)
         }
     }
+    
+    // MARK: - Get Historical Rate Data API call
+    /*
+     @Developer     - Paras Navadiya
+     @Description   - This method will used to get Get historical rates for a time period.
+     @Parameter     - Base country and OtherCountry
+     @Return        - Void
+     */
+    
+    func getRateBWdates(baseCountry : String, otherCountry: String)
+    {
+        print(baseCountry, otherCountry)
+        if Connectivity.sharedInstance.isReachable
+        {
+            provider.request(.getRatesBWDates(baseCountry: baseCountry, otherCountry: otherCountry, stratDate:Date().getNewDate(daycount: -7).getString() , endDate:Date().getString() )) { Result in
+                
+                switch Result
+                {
+                case .success(let response):
+                    do
+                    {
+                        let json = try JSONDecoder().decode(HistoricalRates.self, from: response.data)
+                        if json.rates?.count ?? 0 > 0
+                        {
+                            self.arrChartData.removeAll()
+                            for item in json.rates!
+                            {
+                                var data  = ChartData()
+                                data.date = item.key
+                                
+                                let dic = item.value
+                                data.currency = dic[otherCountry]
+                                
+                                self.arrChartData.append(data)
+                            }
+                        }
+                        else
+                        {
+                            showAlert(message: "Please try again", viewController: self)
+                        }
+                    }
+                    catch
+                    {
+                        showAlert(message: error.localizedDescription, viewController: self)
+                    }
+                case .failure(let error):
+                    showAlert(message: error.localizedDescription, viewController: self)
+                }
+            }
+        }
+        else
+        {
+            showAlert(message: "The Internet connection appears to be offline", viewController: self)
+        }
+    }
+    
     // MARK: - Button Action Methods
     @IBAction func btnBaseCountry(_ sender: Any)
     {
@@ -176,17 +282,23 @@ class CurrencyConvertVC: UIViewController, UIPickerViewDelegate, UIPickerViewDat
     
     @IBAction func btnDonePicker(_ sender: Any)
     {
+        if strBaseCountry == otherCountry
+        {
+            showAlert(message: "Both countries are same \nPlease change to other country", viewController: self)
+            return
+        }
+        
         if isBaseCountry
         {
             btnBaseCountry.setTitle("\(strBaseCountry)", for: .normal)
-            refreshData(baseCountry: strBaseCountry, otherCountry: otherCountry)
         }
         else
         {
-            btnOtherCountry.setTitle("\(strBaseCountry)", for: .normal)
-            refreshData(baseCountry: strBaseCountry, otherCountry: otherCountry)
+            btnOtherCountry.setTitle("\(otherCountry)", for: .normal)
         }
         
+        convertCurrency(baseCountry: strBaseCountry, otherCountry: otherCountry) {                      self.getRateBWdates(baseCountry: self.strBaseCountry, otherCountry: self.otherCountry)
+        }
         viewPicker.isHidden = true
         self.view.sendSubviewToBack(viewPicker)
     }
@@ -198,25 +310,23 @@ class CurrencyConvertVC: UIViewController, UIPickerViewDelegate, UIPickerViewDat
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int
     {
-        return self.rate.count
+        return self.arrCountryList.count
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int)
     {
-        strBaseCountry = self.rate[row].countryName ?? ""
-        
         if isBaseCountry
         {
-            otherCountry = btnOtherCountry.titleLabel?.text ?? ""
+            strBaseCountry = self.arrCountryList[row].countryName ?? ""
         }
         else
         {
-            otherCountry = btnOtherCountry.titleLabel?.text ?? ""
+            otherCountry = self.arrCountryList[row].countryName ?? ""
         }
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String?
     {
-        return self.rate[row].countryName
+        return self.arrCountryList[row].countryName
     }
 }

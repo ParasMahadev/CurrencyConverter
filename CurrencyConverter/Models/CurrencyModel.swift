@@ -21,6 +21,24 @@ struct CurrencyRate
     var countryCurrency : Double?
 }
 
+// MARK: - HistoricalRates
+struct HistoricalRates: Codable
+{
+    let rates: [String: [String: Double]]?
+    let startAt, base, endAt: String?
 
+    enum CodingKeys: String, CodingKey {
+        case rates
+        case startAt = "start_at"
+        case base
+        case endAt = "end_at"
+    }
+}
 
+// MARK: - ChartData
+struct ChartData
+{
+    var date : String?
+    var currency : Double?
+}
 

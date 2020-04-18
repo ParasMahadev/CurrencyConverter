@@ -16,6 +16,8 @@
 		94E9CC51244975A600F934E3 /* HelperClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E9CC4E244975A600F934E3 /* HelperClass.swift */; };
 		94E9CC52244975A600F934E3 /* DatabseMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E9CC4F244975A600F934E3 /* DatabseMethods.swift */; };
 		94E9CC53244975A600F934E3 /* WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E9CC50244975A600F934E3 /* WebService.swift */; };
+		94E9CC65244AFF2B00F934E3 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E9CC64244AFF2B00F934E3 /* Extensions.swift */; };
+		94E9CC76244B253B00F934E3 /* DayAxisValueFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E9CC75244B253B00F934E3 /* DayAxisValueFormatter.swift */; };
 		94EB8DCC24486E6A00BB5F27 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EB8DCB24486E6A00BB5F27 /* AppDelegate.swift */; };
 		94EB8DCE24486E6A00BB5F27 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EB8DCD24486E6A00BB5F27 /* SceneDelegate.swift */; };
 		94EB8DD324486E6A00BB5F27 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94EB8DD124486E6A00BB5F27 /* Main.storyboard */; };
@@ -61,6 +63,8 @@
 		94E9CC4E244975A600F934E3 /* HelperClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelperClass.swift; sourceTree = "<group>"; };
 		94E9CC4F244975A600F934E3 /* DatabseMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabseMethods.swift; sourceTree = "<group>"; };
 		94E9CC50244975A600F934E3 /* WebService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebService.swift; sourceTree = "<group>"; };
+		94E9CC64244AFF2B00F934E3 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		94E9CC75244B253B00F934E3 /* DayAxisValueFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayAxisValueFormatter.swift; sourceTree = "<group>"; };
 		94EB8DC824486E6A00BB5F27 /* CurrencyConverter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CurrencyConverter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94EB8DCB24486E6A00BB5F27 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		94EB8DCD24486E6A00BB5F27 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -147,9 +151,11 @@
 		94E9CC4D244975A600F934E3 /* HelperClasses */ = {
 			isa = PBXGroup;
 			children = (
+				94E9CC75244B253B00F934E3 /* DayAxisValueFormatter.swift */,
 				94E9CC4E244975A600F934E3 /* HelperClass.swift */,
 				94E9CC4F244975A600F934E3 /* DatabseMethods.swift */,
 				94E9CC50244975A600F934E3 /* WebService.swift */,
+				94E9CC64244AFF2B00F934E3 /* Extensions.swift */,
 			);
 			path = HelperClasses;
 			sourceTree = "<group>";
@@ -467,9 +473,11 @@
 				94EB8DCC24486E6A00BB5F27 /* AppDelegate.swift in Sources */,
 				94EB8DCE24486E6A00BB5F27 /* SceneDelegate.swift in Sources */,
 				94E9CC4B2449759C00F934E3 /* CurrencyConvertVC.swift in Sources */,
+				94E9CC76244B253B00F934E3 /* DayAxisValueFormatter.swift in Sources */,
 				94E9CC422449758700F934E3 /* CurrencyModel.swift in Sources */,
 				94E9CC4C2449759C00F934E3 /* CurrencyExchange.swift in Sources */,
 				94E9CC52244975A600F934E3 /* DatabseMethods.swift in Sources */,
+				94E9CC65244AFF2B00F934E3 /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
