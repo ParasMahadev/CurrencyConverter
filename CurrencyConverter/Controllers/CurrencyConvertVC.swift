@@ -20,6 +20,7 @@ class CurrencyConvertVC: UIViewController, UIPickerViewDelegate, UIPickerViewDat
     
     @IBOutlet var viewPicker: UIView!
     @IBOutlet var pickerVw: UIPickerView!
+    @IBOutlet var lblLastUpdate: UILabel!
     
     var isBaseCountry = true
     
@@ -38,6 +39,14 @@ class CurrencyConvertVC: UIViewController, UIPickerViewDelegate, UIPickerViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        btnBaseCountry.layer.cornerRadius = 5
+        btnBaseCountry.layer.borderColor = UIColor.link.cgColor
+        btnBaseCountry.layer.borderWidth = 1.0
+        
+        btnOtherCountry.layer.cornerRadius = 5
+        btnOtherCountry.layer.borderColor = UIColor.link.cgColor
+        btnOtherCountry.layer.borderWidth = 1.0
+        
         btnBaseCountry.setTitle("\(strBaseCountry)", for: .normal)
         btnOtherCountry.setTitle("\(otherCountry)", for: .normal)
         
@@ -48,6 +57,14 @@ class CurrencyConvertVC: UIViewController, UIPickerViewDelegate, UIPickerViewDat
         
         txtBaseCountry.addTarget(self, action: #selector(txtBaseCountryEditing), for: UIControl.Event.editingChanged)
         txtOtherCountry.addTarget(self, action: #selector(txtOtherCountryEditing), for: UIControl.Event.editingChanged)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        self.view.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc func dismissKeyboard () {
+        txtBaseCountry.resignFirstResponder()
+        txtOtherCountry.resignFirstResponder()
     }
     
     @objc func txtBaseCountryEditing(textField: UITextField)
@@ -106,6 +123,7 @@ class CurrencyConvertVC: UIViewController, UIPickerViewDelegate, UIPickerViewDat
                             
                             self.txtOtherCountry.text = "\(baseVal * countryCurrency)"
                         }
+                        self.lblLastUpdate.text = "Last updated: " + (json.date ?? "")
                         
                     } catch  {
                         print(error)
@@ -117,25 +135,37 @@ class CurrencyConvertVC: UIViewController, UIPickerViewDelegate, UIPickerViewDat
         }
         else
         {
-            self.rate = DatabseMethods.shared.getData()
-            if self.rate.count == 0
-            {
-                showAlert(message: "No Internet connectivity", viewController: self)
-            }
+            showAlert(message: "The Internet connection appears to be offline", viewController: self)
         }
     }
     // MARK: - Button Action Methods
     @IBAction func btnBaseCountry(_ sender: Any)
     {
-        isBaseCountry = true
-        viewPicker.isHidden = false
-        self.view.bringSubviewToFront(viewPicker)
+        if Connectivity.sharedInstance.isReachable
+        {
+            dismissKeyboard()
+            isBaseCountry = true
+            viewPicker.isHidden = false
+            self.view.bringSubviewToFront(viewPicker)
+        }
+        else
+        {
+            showAlert(message: "The Internet connection appears to be offline", viewController: self)
+        }
     }
     @IBAction func btnOtherCountry(_ sender: Any)
     {
-        isBaseCountry = false
-        viewPicker.isHidden = false
-        self.view.bringSubviewToFront(viewPicker)
+        if Connectivity.sharedInstance.isReachable
+        {
+            dismissKeyboard()
+            isBaseCountry = false
+            viewPicker.isHidden = false
+            self.view.bringSubviewToFront(viewPicker)
+        }
+        else
+        {
+            showAlert(message: "The Internet connection appears to be offline", viewController: self)
+        }
     }
     
     @IBAction func btnCancelPicker(_ sender: Any)

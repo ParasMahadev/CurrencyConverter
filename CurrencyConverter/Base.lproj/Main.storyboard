@@ -95,17 +95,17 @@
                     <navigationItem key="navigationItem" id="EH9-84-zCF">
                         <nil key="title"/>
                         <view key="titleView" contentMode="scaleToFill" id="EGY-az-DFm">
-                            <rect key="frame" x="82" y="2" width="250" height="40"/>
+                            <rect key="frame" x="107" y="2" width="200" height="40"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B0w-pP-tuH">
-                                    <rect key="frame" x="0.0" y="0.0" width="250" height="40"/>
+                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B0w-pP-tuH">
+                                    <rect key="frame" x="0.0" y="0.0" width="200" height="40"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
-                                    <inset key="titleEdgeInsets" minX="-15" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                    <inset key="imageEdgeInsets" minX="227" minY="1" maxX="0.0" maxY="0.0"/>
-                                    <state key="normal" title="Currency Exchange(MYR)" image="arrowtriangle.down.fill" catalog="system">
+                                    <inset key="titleEdgeInsets" minX="-35" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                    <inset key="imageEdgeInsets" minX="170" minY="1" maxX="0.0" maxY="0.0"/>
+                                    <state key="normal" title="Exchange (MYR)" image="arrowtriangle.down.fill" catalog="system">
                                         <color key="titleColor" systemColor="linkColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </state>
                                     <state key="highlighted">
@@ -172,7 +172,7 @@
             </objects>
             <point key="canvasLocation" x="222" y="622"/>
         </scene>
-        <!--Currency Convert-->
+        <!--Convert-->
         <scene sceneID="4cD-jj-KGV">
             <objects>
                 <viewController id="PqD-XH-r4C" customClass="CurrencyConvertVC" customModule="CurrencyConverter" customModuleProvider="target" sceneMemberID="viewController">
@@ -286,10 +286,21 @@
                                     <constraint firstAttribute="height" constant="260" id="kaQ-m0-Bpd"/>
                                 </constraints>
                             </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last updated: 2020-04-18" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kAN-Gp-MW7">
+                                <rect key="frame" x="142" y="204" width="252" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="0YG-V6-2Yw"/>
+                                    <constraint firstAttribute="width" constant="252" id="cUt-Lc-1NW"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                <color key="textColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="5hS-YF-VSx" firstAttribute="top" secondItem="GRI-B8-0yd" secondAttribute="top" constant="20" id="1o8-oM-KoV"/>
+                            <constraint firstItem="GRI-B8-0yd" firstAttribute="trailing" secondItem="kAN-Gp-MW7" secondAttribute="trailing" constant="20" id="Cnp-Iy-eQK"/>
                             <constraint firstItem="YhV-Ne-tSd" firstAttribute="trailing" secondItem="GRI-B8-0yd" secondAttribute="trailing" id="IZd-u7-jmv"/>
                             <constraint firstItem="sqR-xk-n70" firstAttribute="leading" secondItem="Kgk-zP-D7b" secondAttribute="trailing" constant="10" id="Js9-NR-dR6"/>
                             <constraint firstItem="UaW-SM-tA1" firstAttribute="leading" secondItem="GRI-B8-0yd" secondAttribute="leading" constant="20" id="QhE-ux-9CH"/>
@@ -300,15 +311,17 @@
                             <constraint firstItem="GRI-B8-0yd" firstAttribute="trailing" secondItem="sqR-xk-n70" secondAttribute="trailing" constant="20" id="lPy-o0-5Eh"/>
                             <constraint firstItem="UaW-SM-tA1" firstAttribute="top" secondItem="GRI-B8-0yd" secondAttribute="top" constant="20" id="o7B-RS-3nR"/>
                             <constraint firstItem="Kgk-zP-D7b" firstAttribute="top" secondItem="UaW-SM-tA1" secondAttribute="bottom" constant="20" id="olc-wD-kOK"/>
+                            <constraint firstItem="kAN-Gp-MW7" firstAttribute="top" secondItem="sqR-xk-n70" secondAttribute="bottom" constant="8" id="uJ1-3B-t9C"/>
                             <constraint firstItem="5hS-YF-VSx" firstAttribute="leading" secondItem="UaW-SM-tA1" secondAttribute="trailing" constant="10" id="wpK-tZ-j1e"/>
                             <constraint firstItem="Kgk-zP-D7b" firstAttribute="leading" secondItem="GRI-B8-0yd" secondAttribute="leading" constant="20" id="x1B-27-Uyc"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="GRI-B8-0yd"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Currency Convert" id="WV9-Jh-91C"/>
+                    <navigationItem key="navigationItem" title="Convert" id="WV9-Jh-91C"/>
                     <connections>
                         <outlet property="btnBaseCountry" destination="UaW-SM-tA1" id="kg1-gr-j71"/>
                         <outlet property="btnOtherCountry" destination="Kgk-zP-D7b" id="tRf-TF-KEJ"/>
+                        <outlet property="lblLastUpdate" destination="kAN-Gp-MW7" id="6gl-oS-gee"/>
                         <outlet property="pickerVw" destination="ZaM-nH-i43" id="MUZ-fm-mc1"/>
                         <outlet property="txtBaseCountry" destination="5hS-YF-VSx" id="dyc-Ea-XkQ"/>
                         <outlet property="txtOtherCountry" destination="sqR-xk-n70" id="0Qg-ri-Dr5"/>

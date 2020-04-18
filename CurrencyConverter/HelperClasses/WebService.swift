@@ -13,10 +13,6 @@ enum WebService{
     case getExchangeRates
     case getExchangeRatesByBaseCountry(baseCountry : String)
     case getExchangeRatesBWCountry(baseCountry : String, otherCountry: String)
-    
-    //https://api.exchangeratesapi.io/latest?base=USD&symbols=USD,GBP
-    
-    
 }
 extension WebService : TargetType{
     

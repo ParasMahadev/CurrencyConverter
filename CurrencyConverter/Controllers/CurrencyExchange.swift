@@ -33,7 +33,7 @@ class CurrencyExchange: UIViewController, UITableViewDataSource, UITableViewDele
     var selectedCountry = "MYR"{
         didSet
         {
-            btnTitle.setTitle("Currency Exchange(\(selectedCountry))", for: .normal)
+            btnTitle.setTitle("Exchange (\(selectedCountry))", for: .normal)
         }
     }
     
@@ -78,7 +78,7 @@ class CurrencyExchange: UIViewController, UITableViewDataSource, UITableViewDele
             self.rate = DatabseMethods.shared.getData()
             if self.rate.count == 0
             {
-                showAlert(message: "No Internet connectivity", viewController: self)
+                showAlert(message: "The Internet connection appears to be offline", viewController: self)
             }
         }
     }
