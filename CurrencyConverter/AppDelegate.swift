@@ -15,17 +15,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         
-        // ketan changes
-        //Paras changes1
-        //ketan changes2
-        //ketan changes3
+       // mahesh changes here
+        // live 1
+        // live 3
+        // live 5
+        // live 6
         
-        
-        
-        // Paras changes
-        //Paraas changes1
-        //Paraas changes2
-        //Paraas changes3
         
         
         return true
